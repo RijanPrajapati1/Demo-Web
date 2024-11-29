@@ -9,7 +9,7 @@ connectDb();
 
 app.use(express.json());
 
-app.use("/api/customer",customer_route);
+app.use("/api/customer", customer_route);
 
 
 const port=3000;
