@@ -1,5 +1,5 @@
 const express=require("express");
-const { findAll, save, findById, deleteById, update } = require("../controller/customer_controller");
+const { findAll, save, findById, deleteById, update } = require("../controller/user_controller");
 const { authorization } = require("../security/auth");
 
 const router=express.Router();
