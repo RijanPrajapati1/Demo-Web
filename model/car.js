@@ -1,6 +1,6 @@
-const mongoose=require("mongoose")
+const mongoose=require("mongoose");
 
-const groundSchema=new mongoose.Schema({
+const carSchema=new mongoose.Schema({
     name:{
         type:String,
         required:true
@@ -15,6 +15,6 @@ const groundSchema=new mongoose.Schema({
     }
 })
 
-const Cars=mongoose.model("cars",groundSchema)
+const Cars=mongoose.model("cars",carSchema)
 
-module.exports=Customer;
+module.exports=Cars;

@@ -1,38 +1,30 @@
-const { response } = require("express");
-const jwt = require("jsonwebtoken")
+const jwt= require("jsonwebtoken")
+const SECRET_KEY="8261ba19898d0dcdfe6c0c411df74b587b2e54538f5f451633b71e39f957cf01";
 
-function authorization(req, res, next) {
+function authenticateToken(req,res,next){
+    const token=req.header("Authorization")?.split(" ")[1];
+    if(!token){
+        return res.status(401).send("Access denied: No token provided")
+    }
 
     try {
-        const token = req?.header('Authorization')?.split(" ")[1]
-
-        if (!token) {
-            res.status(401).json({
-                mesage: "UnAuthorized"
-            });
-        } else {
-            try{
-                const verified = jwt.verify(token, "3b833911d85b476e758fdd1156c567deb4dffc7445374849c5827d9f7799161c");
-                req.user = verified;
-                next();
-            }catch(e){
-                response.status(401).json({
-                    message: "Invalid Token"
-                })
-                
-            }
-           
-        }
-
-    } catch (e) {
-        res.status(401).json({
-            mesage: "UnAuthorized"
-        })
+        const verified = jwt.verify(token, SECRET_KEY)
+        req.user = verified;
+        next()
+    }catch (e) {
+        res.status(400).send("Invalid token")
     }
 
 }
 
+function authorizeRole(role){
+    return (req,res,next)=>{
+        if(req.user.role!==role){
+            return res.status(403).send("Access Denied:Insufficient Permissions")
+        }
 
-module.exports = {
-    authorization
+        next();
+    }
 }
+
+module.exports={authenticateToken,authorizeRole}

@@ -1,10 +1,21 @@
+const joi=require("joi");
 
 
-const express=require("express")
+const userSchema=joi.object({
+    full_name:joi.string().required(),
+    email:joi.string().required().email(),
+    contact_no:joi.string().required()
+})
 
-const userValidation=joi.object({
-    name:joi.string().required(),
-    age:joi.number().required()
-});
+
+function UserValidation(req,res,next){
+    const {full_name,email,contact_no}=req.body;
+    const {error}=userSchema.validate({full_name,email,contact_no})
+    if(error){
+     return res.json(error)
+    }
+    next()
+}
 
 
+module.exports=UserValidation;
