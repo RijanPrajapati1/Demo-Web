@@ -2,7 +2,7 @@ const express = require("express");
 const { findAll, save, findById, deleteById, update } = require("../controller/car_controller");
 
 // const { authorization } = require("../security/auth");
-const { authenticateToken } = require("../security/auth");
+const { authenticateToken, authorizeRole } = require("../security/auth");
 
 const router = express.Router();
 
@@ -20,10 +20,10 @@ const upload = multer({ storage })
 
 
 router.get("/", findAll)
-router.post("/", authenticateToken, upload.single('file'), save)
-router.get("/:id", authenticateToken, findById)
-router.delete("/:id", authenticateToken, deleteById)
-router.put("/:id", authenticateToken, update)
+router.post("/", authenticateToken,authorizeRole("admin"), upload.single('file'), save)
+router.get("/:id",authorizeRole("admin"), authenticateToken, findById)
+router.delete("/:id",authorizeRole("admin"), authenticateToken, deleteById)
+router.put("/:id",authorizeRole("admin"), authenticateToken, update)
 
 
 module.exports = router;

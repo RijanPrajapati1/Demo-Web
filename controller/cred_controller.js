@@ -4,6 +4,14 @@ const SECRET_KEY = "8261ba19898d0dcdfe6c0c411df74b587b2e54538f5f451633b71e39f957
 const Cred = require("../model/cred")
 const register = async (req, res) => {
     const { username, password, role } = req.body;
+
+    // Validate role
+    const allowedRoles = ["admin", "customer"];
+    if (!allowedRoles.includes(role)) {
+        return res.status(400).send(`Invalid role. Allowed roles are: ${allowedRoles.join(", ")}`);
+    }
+
+    //hash password and saving
     const hashedPassword = await bcrypt.hash(password, 10);
     const cred = new Cred({ username, password: hashedPassword, role })
     cred.save();
